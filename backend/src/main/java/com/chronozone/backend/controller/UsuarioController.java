@@ -27,16 +27,26 @@ public class UsuarioController {
 
     @Data
     public class LoginRequest {
-    private String email;
-    private String senha;
+        private String email;
+        private String senha;
 
-    // getters e setters
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-    public String getSenha() { return senha; }
-    public void setSenha(String senha) { this.senha = senha; }
-}
+        // getters e setters
+        public String getEmail() {
+            return email;
+        }
 
+        public void setEmail(String email) {
+            this.email = email;
+        }
+
+        public String getSenha() {
+            return senha;
+        }
+
+        public void setSenha(String senha) {
+            this.senha = senha;
+        }
+    }
 
     @Autowired
     private UsuarioService usuarioService;
@@ -61,12 +71,12 @@ public class UsuarioController {
         Usuario usuario = usuarioRepository.findByEmail(email);
 
         if (usuario != null && usuario.getSenha().equals(senha)) {
+            usuario.setSenha(null); // NÃO enviar senha pro front!
             return ResponseEntity.ok(usuario);
         }
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
-
 
     @PutMapping("/{id}")
     public Usuario atualizar(@PathVariable Long id, @RequestBody Usuario usuario) {
@@ -79,7 +89,6 @@ public class UsuarioController {
             return null;
         }
     }
-
 
     @DeleteMapping("/{id}")
     public void deletar(@PathVariable Long id) {

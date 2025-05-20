@@ -53,14 +53,27 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      const usuario = JSON.parse(sessionStorage.getItem("usuarioLogado"));
-      if (!usuario) {
-        alert("Você precisa estar logado para criar uma postagem.");
-        window.location.href = "index.html";
-        return;
-      }
 
+      // Copia o usuarioId do localStorage para o sessionStorage, se ainda não estiver lá
+    const usuarioId = localStorage.getItem("usuarioId");
+    if (usuarioId && !sessionStorage.getItem("usuarioId")) {
+      sessionStorage.setItem("usuarioId", usuarioId);
+    }
+
+  if (!usuarioId) {
+    alert("Você precisa estar logado para criar uma postagem.");
+    window.location.href = "index.html";
+    return;
+  }
+
+  fetch(`http://localhost:8080/usuarios/${usuarioId}`)
+    .then(res => {
+      if (!res.ok) throw new Error("Usuário não encontrado");
+      return res.json();
+    })
+    .then(usuario => {
       const form = document.getElementById("formPost");
+
       form.addEventListener("submit", (e) => {
         e.preventDefault();
 
@@ -72,7 +85,7 @@
           titulo,
           texto,
           genero,
-          autor: usuario.nome,
+          autor: usuario.nome, // agora usando o nome real
           data: new Date().toLocaleString()
         };
 
@@ -83,7 +96,14 @@
         alert("Post publicado com sucesso!");
         window.location.href = `postagem.html?genero=${encodeURIComponent(genero)}`;
       });
+    })
+    .catch(err => {
+      alert("Erro ao verificar usuário. Faça login novamente.");
+      localStorage.removeItem("usuarioId");
+      window.location.href = "index.html";
     });
+});
+
   </script>
 </body>
 </html>

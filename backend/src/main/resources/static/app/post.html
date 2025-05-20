@@ -122,7 +122,7 @@
   </div>
 
   <script>
-    const post = JSON.parse(sessionStorage.getItem("postSelecionado"));
+    const post = JSON.parse(localStorage.getItem("postSelecionado"));
     const curtidasKey = `curtidas_${post?.id || post?.titulo}`;
     const comentariosKey = `comentarios_${post?.id || post?.titulo}`;
 
@@ -170,7 +170,7 @@
         e.preventDefault();
         const input = document.getElementById("comentarioTexto");
         const texto = input.value.trim();
-        const usuario = JSON.parse(sessionStorage.getItem("usuarioLogado"));
+        const usuario = JSON.parse(localStorage.getItem("usuarioLogado"));
 
         if (texto && usuario) {
           comentarios.push({ autor: usuario.nome, texto });
