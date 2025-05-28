@@ -6,6 +6,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
 
+// A camada model representa os dados do sistema, 
+// ou seja, as informações que o sistema precisa armazenar.
+
 @Entity
 @Data
 public class Usuario {
